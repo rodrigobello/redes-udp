@@ -2,7 +2,7 @@ from app.service import UDPService
 from app.exceptions import *
 
 
-class Client:
+class ClientController:
     def __init__(self, service=None):
         self.service = service or UDPService()
 
@@ -15,7 +15,8 @@ class Client:
             print(f'Sent "{message}" to {host}:{port}')
 
             response, server = self.service.receive_response()
-            print(f'Received "{response.decode()}" from {server[0]}:{server[1]}')
+            host, port = server
+            print(f'Received "{response.decode()}" from {host}:{port}')
 
             self.service.close_socket()
             print('Closed client socket')
