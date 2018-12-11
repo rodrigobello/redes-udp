@@ -31,9 +31,12 @@ int main()
     int n = recvfrom(listenfd, buffer, sizeof(buffer),
             0, (struct sockaddr*)&cliaddr,&len); //receive message from server
     buffer[n] = '\0';
-    puts(buffer);
+    int c = 0;
 
-    // send the response
+    for (c=1; buffer[c] != '\0'; ++c)
+        printf("%c", buffer[c]);
+
+    // send the Iresponse
     sendto(listenfd, message, MAXLINE, 0,
           (struct sockaddr*)&cliaddr, sizeof(cliaddr));
 }
