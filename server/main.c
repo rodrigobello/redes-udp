@@ -1,42 +1,72 @@
-// server program for udp connection
+// Server side implementation of UDP client-server model
 #include <stdio.h>
-#include <strings.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
-#include <arpa/inet.h>
 #include <sys/socket.h>
-#include<netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+
 #define PORT 9909
-#define MAXLINE 1000
+#define MAXLINE 1024
 
-// Driver code
-int main()
-{
-    char buffer[100];
-    char *message = "Hello Client";
-    int listenfd, len;
-    struct sockaddr_in servaddr, cliaddr;
-    bzero(&servaddr, sizeof(servaddr));
+int create_socket();
+void setup_sockaddr_in(struct sockaddr_in *server_address, struct sockaddr_in *client_address);
+void bind_address(struct sockaddr_in *server_address, int sockfd);
 
-    // Create a UDP Socket
-    listenfd = socket(AF_INET, SOCK_DGRAM, 0);
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port = htons(PORT);
-    servaddr.sin_family = AF_INET;
 
-    // bind server address to socket deor
-    bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+int main(int argc, char *argv[]) {
+    int sockfd = create_socket();
+    char buffer[MAXLINE];
+    char *hello = "Hello from server";
+    struct sockaddr_in server_address, client_address;
 
-    //receive the datagram
-    len = sizeof(cliaddr);
-    int n = recvfrom(listenfd, buffer, sizeof(buffer),
-            0, (struct sockaddr*)&cliaddr,&len); //receive message from server
+    setup_sockaddr_in(&server_address, &client_address);
+
+    bind_address(&server_address, sockfd);
+
+    // Receive message
+    int len, n;
+    n = recvfrom(sockfd, (char *)buffer, MAXLINE,
+                MSG_WAITALL, ( struct sockaddr *) &client_address,
+                &len);
     buffer[n] = '\0';
-    int c = 0;
+    printf("Client : %s\n", buffer);
 
-    for (c=1; buffer[c] != '\0'; ++c)
-        printf("%c", buffer[c]);
+    // Send response
+    sendto(sockfd, (const char *)hello, strlen(hello),
+        MSG_CONFIRM, (const struct sockaddr *) &client_address,
+            len);
+    printf("'%s' sent.\n", hello);
 
-    // send the Iresponse
-    sendto(listenfd, message, MAXLINE, 0,
-          (struct sockaddr*)&cliaddr, sizeof(cliaddr));
+    return 0;
+}
+
+int create_socket() {
+    int sockfd;
+    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
+        perror("Fail to create socket");
+        exit(EXIT_FAILURE);
+    }
+    return sockfd;
+}
+
+void setup_sockaddr_in(struct sockaddr_in *server_address, struct sockaddr_in *client_address) {
+    memset(server_address, 0, sizeof(server_address));
+    memset(client_address, 0, sizeof(client_address));
+
+    // Filling server information
+    (*server_address).sin_family = AF_INET;
+    (*server_address).sin_addr.s_addr = INADDR_ANY;
+    (*server_address).sin_port = htons(PORT);
+}
+
+void bind_address(struct sockaddr_in *server_address, int sockfd) {
+    if ( bind(sockfd, (const struct sockaddr *)server_address,
+            sizeof(*server_address)) < 0 )
+    {
+        perror("Fail to bind address");
+        exit(EXIT_FAILURE);
+    }
 }

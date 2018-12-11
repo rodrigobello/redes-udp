@@ -26,7 +26,7 @@ class MessageFactory:
         return self.Message(message_value, message_type)
 
     def __map_integer(self, value):
-        return int(value)
+        return str(int(value))
 
     def __map_string(self, value):
         return str(value)

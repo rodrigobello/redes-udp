@@ -11,12 +11,12 @@ class ClientController:
             self.service.create_socket()
             print('Created client socket')
 
-            self.service.send_message(message.encode('ascii'), host, port)
+            self.service.send_message(message.encode(), host, port)
             print(f'Sent "{message}" to {host}:{port}')
 
             response, server = self.service.receive_response()
             host, port = server
-            response = response.decode('utf-8', 'ignore')
+            response = response.decode()
             print(f'Received "{response}" from {host}:{port}')
 
             self.service.close_socket()
