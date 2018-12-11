@@ -30,4 +30,6 @@ class App:
 
     def run(self, **kwargs):
         message = self.__get_user_input()
-        self.controller.communicate(message=message.value)
+        self.controller.communicate(
+            message=message.value,
+        )
