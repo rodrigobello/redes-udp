@@ -1,4 +1,3 @@
-// Server side implementation of UDP client-server model
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,7 +13,12 @@
 int create_socket();
 void setup_sockaddr_in(struct sockaddr_in *server_address, struct sockaddr_in *client_address);
 void bind_address(struct sockaddr_in *server_address, int sockfd);
-
+void send_response(int sockfd, char* message, int len, struct sockaddr_in *client_address) {
+    sendto(sockfd, (const char *) message, strlen(message),
+           MSG_CONFIRM, (const struct sockaddr *)client_address,
+           len);
+    printf("'%s' sent.\n", message);
+}
 
 int main(int argc, char *argv[]) {
     int sockfd = create_socket();
@@ -32,13 +36,20 @@ int main(int argc, char *argv[]) {
                 MSG_WAITALL, ( struct sockaddr *) &client_address,
                 &len);
     buffer[n] = '\0';
-    printf("Client : %s\n", buffer);
 
-    // Send response
-    sendto(sockfd, (const char *)hello, strlen(hello),
-        MSG_CONFIRM, (const struct sockaddr *) &client_address,
-            len);
-    printf("'%s' sent.\n", hello);
+    switch(buffer[0]) {
+        case 'i':
+            printf("Received the integer '%s' from client\n", buffer);
+            break;
+        case 's':
+            printf("Received the string '%s' from client\n", buffer);
+            break;
+        case 'c':
+            printf("Received the character '%s' from client\n", buffer);
+            break;
+    }
+
+    send_response(sockfd, hello, len, &client_address);
 
     return 0;
 }
