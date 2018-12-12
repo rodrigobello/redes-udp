@@ -6,7 +6,7 @@ class ClientController:
     def __init__(self, service=None):
         self.service = service or UDPService()
 
-    def communicate(self, message='hello world', host='localhost', port=9909):
+    def communicate(self, host, port, message='hello world'):
         try:
             self.service.create_socket()
             print('Created client socket')

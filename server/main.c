@@ -16,28 +16,11 @@ void setup_sockaddr_in(struct sockaddr_in (*), struct sockaddr_in (*));
 void bind_address(struct sockaddr_in (*), int);
 void send_response(int, char (*), int, struct sockaddr_in (*));
 
-char character_strategy(char* message) {
-    char c = message[1];
-    if (c == toupper(c))
-        return tolower(c);
-    else
-        return toupper(c);
-}
-
-int integer_strategy(char* message) {
-    int i = atoi(message);
-    return i+1;
-}
-
-char * string_strategy(char* message) {
-    return message;
-}
-
 
 int main(int argc, char *argv[]) {
     int sockfd = create_socket();
     char buffer[MAXLINE];
-    char *hello = "Hello from server";
+    char response[MAXLINE];
     struct sockaddr_in server_address, client_address;
 
     setup_sockaddr_in(&server_address, &client_address);
@@ -45,7 +28,7 @@ int main(int argc, char *argv[]) {
     bind_address(&server_address, sockfd);
 
     // Receive message
-    int len, n;
+    unsigned int len, n;
     n = recvfrom(sockfd, (char *)buffer, MAXLINE,
                 MSG_WAITALL, ( struct sockaddr *) &client_address,
                 &len);
@@ -59,17 +42,28 @@ int main(int argc, char *argv[]) {
 
     switch(flag) {
         case 'i':
-            printf("Received the integer '%d' from client\n", integer_strategy(buffer));
-            break;
+        printf("Received the integer '%s' from client\n", buffer);
+        int i = atoi(buffer);
+        sprintf(response, "%d", i+1);
+        break;
+
         case 's':
-            printf("Received the string '%s' from client\n", string_strategy(buffer));
-            break;
+        break;
+
         case 'c':
-            printf("Received the character '%c' from client\n", character_strategy(buffer));
-            break;
+        if (buffer[0] == toupper(buffer[0]))
+            response[0] = tolower(buffer[0]);
+        else
+            response[0] = toupper(buffer[0]);
+        response[1] = '\0';
+        break;
+
+        default:
+        printf("Invalid type!");
+        break;
     }
 
-    send_response(sockfd, hello, len, &client_address);
+    send_response(sockfd, response, len, &client_address);
 
     return 0;
 }
@@ -84,8 +78,8 @@ int create_socket() {
 }
 
 void setup_sockaddr_in(struct sockaddr_in *server_address, struct sockaddr_in *client_address) {
-    memset(server_address, 0, sizeof(server_address));
-    memset(client_address, 0, sizeof(client_address));
+    memset(server_address, 0, sizeof(*server_address));
+    memset(client_address, 0, sizeof(*client_address));
 
     // Filling server information
     (*server_address).sin_family = AF_INET;
