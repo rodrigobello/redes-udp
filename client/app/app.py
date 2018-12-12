@@ -30,8 +30,9 @@ class App:
 
     def run(self, **kwargs):
         message = self.__get_user_input()
-        self.controller.communicate(
+        rtt = self.controller.communicate(
             message=message,
             host=kwargs.get('host') or '127.0.0.1',
             port=kwargs.get('port') or 8000
         )
+        print(f'RTT: {rtt*1000} ms')
