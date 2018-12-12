@@ -26,7 +26,7 @@ class MessageFactory:
         return self.Message(message_value, message_type)
 
     def __map_integer(self, value):
-        return str(int(value))
+        return int(value)
 
     def __map_string(self, value):
         return str(value)
@@ -44,6 +44,9 @@ class MessageFactory:
         def __init__(self, value=None, _type=None):
             self.value = value
             self.type = _type
+
+        def payload(self):
+            return f'{str(self.type[0])}{str(self.value)}'
 
 class MessageValidationException(ValueError):
     pass

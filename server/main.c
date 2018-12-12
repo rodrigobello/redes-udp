@@ -40,27 +40,36 @@ int main(int argc, char *argv[]) {
         buffer[i] = buffer[i+1];
     }
 
+    n = n - 1;
+    int k = n - 1;
+
     switch(flag) {
         case 'i':
-        printf("Received the integer '%s' from client\n", buffer);
-        int i = atoi(buffer);
-        sprintf(response, "%d", i+1);
-        break;
-
+            printf("Received the integer '%s' from client\n", buffer);
+            int i = atoi(buffer);
+            sprintf(response, "%d", i+1);
+            break;
         case 's':
-        break;
-
+            printf("Received the string '%s' from client\n", buffer);
+            k =  n - 1;
+            for (int i = 0; i < n; i++) {
+                response[i] = buffer[k];
+                k--;
+            }
+            response[n] = '\0';
+            break;
         case 'c':
-        if (buffer[0] == toupper(buffer[0]))
-            response[0] = tolower(buffer[0]);
-        else
-            response[0] = toupper(buffer[0]);
-        response[1] = '\0';
-        break;
-
+            printf("Received the character '%s' from client\n", buffer);
+            if (isupper(buffer[0]))
+                response[0] = (char) tolower(buffer[0]);
+            else
+                response[0] = (char) toupper(buffer[0]);
+            response[1] = '\0';
+            break;
         default:
-        printf("Invalid type!");
-        break;
+            perror("Invalid Type");
+            exit(1);
+            break;
     }
 
     send_response(sockfd, response, len, &client_address);
