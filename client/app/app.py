@@ -31,7 +31,7 @@ class App:
     def run(self, **kwargs):
         message = self.__get_user_input()
         self.controller.communicate(
-            message=message.payload(),
+            message=message,
             host=kwargs.get('host') or '127.0.0.1',
             port=kwargs.get('port') or 8000
         )

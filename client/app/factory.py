@@ -1,4 +1,15 @@
 class MessageFactory:
+    class Message:
+        def __init__(self, value=None, _type=None):
+            self.value = value
+            self.type = _type
+
+        def payload(self):
+            return f'{str(self.type[0])}{str(self.value)}'.encode()
+
+        def __str__(self):
+            return str(self.value)
+
     def __init__(self):
         self.available_types = {
             '1': 'integer',
@@ -40,13 +51,6 @@ class MessageFactory:
     def get_available_types(self):
         return self.available_types
 
-    class Message:
-        def __init__(self, value=None, _type=None):
-            self.value = value
-            self.type = _type
-
-        def payload(self):
-            return f'{str(self.type[0])}{str(self.value)}'
 
 class MessageValidationException(ValueError):
     pass

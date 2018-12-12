@@ -6,18 +6,23 @@ class ClientController:
     def __init__(self, service=None):
         self.service = service or UDPService()
 
-    def communicate(self, host, port, message='hello world'):
+    def communicate(self, host, port, message=None):
+        if not message:
+            print('No message to communicate')
+            return
         try:
             self.service.create_socket()
             print('Created client socket')
 
-            self.service.send_message(message.encode(), host, port)
+            payload = message.payload()
+
+            self.service.send_message(payload, host, port)
             print(f'Sent "{message}" to {host}:{port}')
 
             response, server = self.service.receive_response()
             host, port = server
-            response = response.decode()
-            print(f'Received "{response}" from {host}:{port}')
+
+            print(f'Received "{response.decode()}" from {host}:{port}')
 
             self.service.close_socket()
             print('Closed client socket')
