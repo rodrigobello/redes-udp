@@ -5,7 +5,7 @@ class MessageFactory:
             self.type = _type
 
         def payload(self):
-            return f'{str(self.type[0])}{str(self.value)}'.encode()
+            return '{0}{1}'.format(str(self.type[0]), str(self.value)).encode()
 
         def __str__(self):
             return str(self.value)
@@ -32,7 +32,7 @@ class MessageFactory:
 
         except ValueError:
             raise MessageValidationException(
-                f'"{message_value}" is not of type {message_type}')
+                '"{0}" is not of type {1}'.format(message_value, message_type))
 
         return self.Message(message_value, message_type)
 

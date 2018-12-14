@@ -14,13 +14,13 @@ class App:
             available_types = self.factory.get_available_types()
 
             for key, value in available_types.items():
-                print(f'{key}: {value}')
+                print('{0}: {1}'.format(key, value))
 
             input_type = input('Please choose one of the types above: ')
             message_type = available_types.get(input_type)
 
             if message_type:
-                message_value = input(f'Insert the {message_type}: ')
+                message_value = input('Insert the {}: '.format(message_type))
                 try:
                     return self.factory.create_message(message_value, message_type)
                 except ValueError as e:
@@ -32,7 +32,7 @@ class App:
         host = kwargs.get('host') or '127.0.0.1'
         port = kwargs.get('port') or 8000
 
-        print(f'Running client on {host}:{port}')
+        print('Running client on {0}:{1}'.format(host, port))
 
         message = self.__get_user_input()
         rtt = self.controller.communicate(
@@ -40,4 +40,4 @@ class App:
             host=host,
             port=port
         )
-        print(f'RTT: {rtt*1000} ms')
+        print('RTT: {} ms'.format(rtt*1000))

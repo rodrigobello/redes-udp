@@ -20,13 +20,13 @@ class ClientController:
 
             start = datetime.now()
             self.service.send_message(payload, host, port)
-            print(f'Sent "{message}" to {host}:{port}')
+            print('Sent "{0}" to {1}:{2}'.format(message, host, port))
 
             response, server = self.service.receive_response()
             rtt = datetime.now() - start
 
             host, port = server
-            print(f'Received "{response.decode()}" from {host}:{port}')
+            print('Received "{0}" from {1}:{2}'.format(response.decode(), host, port))
 
             self.service.close_socket()
             print('Closed client socket')
