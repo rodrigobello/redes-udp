@@ -13,7 +13,7 @@ class App:
 
             available_types = self.factory.get_available_types()
 
-            for key, value in available_types.items():
+            for key, value in sorted(available_types.items(), key=lambda x: x[0]):
                 print('{0}: {1}'.format(key, value))
 
             input_type = input('Please choose one of the types above: ')
