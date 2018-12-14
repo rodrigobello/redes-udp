@@ -110,7 +110,7 @@ void bind_address(struct sockaddr_in *server_address, int sockfd) {
 
 int send_response(int sockfd, char* message, int len, struct sockaddr_in *client_address) {
     printf("Sending '%s'\n", message);
-    return sendto(sockfd, (const char *) message, strlen(message),
-           MSG_CONFIRM, (const struct sockaddr *)client_address,
-           len);
+    return sendto(sockfd, (const char *) message, (size_t) strlen(message),
+           0, (const struct sockaddr *)client_address,
+           (size_t) len);
 }
