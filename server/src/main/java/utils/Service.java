@@ -1,3 +1,5 @@
+package app;
+
 class UDPService {
   private DatagramSocket serverSocket;
   private byte[] receiveData;

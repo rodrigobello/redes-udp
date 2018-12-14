@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
-
-import server.app.App;
+import app.App;
 
 class Server {
       public static void main(String args[]) throws Exception {

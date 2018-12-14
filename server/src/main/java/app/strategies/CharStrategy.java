@@ -1,3 +1,7 @@
+package app.strategies;
+
+import utils.Strategy;
+
 public class CharStrategy implements Strategy {
   @Override
   public String execudte(String buffer) {
