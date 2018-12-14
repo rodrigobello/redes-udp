@@ -18,6 +18,7 @@ void send_response(int, char (*), int, struct sockaddr_in (*));
 
 
 int main(int argc, char *argv[]) {
+
     int sockfd = create_socket();
     char buffer[MAXLINE];
     char response[MAXLINE];

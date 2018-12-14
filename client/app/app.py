@@ -29,10 +29,15 @@ class App:
                 print('Type unavailable please try again.')
 
     def run(self, **kwargs):
+        host = kwargs.get('host') or '127.0.0.1'
+        port = kwargs.get('port') or 8000
+
+        print(f'Running client on {host}:{port}')
+
         message = self.__get_user_input()
         rtt = self.controller.communicate(
             message=message,
-            host=kwargs.get('host') or '127.0.0.1',
-            port=kwargs.get('port') or 8000
+            host=host,
+            port=port
         )
         print(f'RTT: {rtt*1000} ms')
