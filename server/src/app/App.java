@@ -2,8 +2,8 @@ package app;
 
 import services.UDPService;
 
-class App {
-    public static void run(int port, int datagramSize) throws Exception {
+public class App {
+    public static void main(String[] args) throws Exception {
         UDPService service = new UDPService(port, datagramSize);
 
 
@@ -22,6 +22,5 @@ class App {
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
             serverSocket.send(sendPacket);
             serverSocket.close();
-        }
     }
 }

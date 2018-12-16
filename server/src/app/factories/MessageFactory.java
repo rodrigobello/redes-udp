@@ -4,7 +4,7 @@ import app.strategies.*;
 import app.utils.message;
 
 class MessageFactory {
-    public Message createMessageFromPayload(bytes[] payload) {
+    public Message buildMessageFromPayload(bytes[] payload) {
         String buffer = new String(payload);
         String content, type;
         switch (payload.charAt(0)) {
