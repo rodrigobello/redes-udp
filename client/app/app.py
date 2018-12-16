@@ -20,9 +20,9 @@ class App:
             message_type = available_types.get(input_type)
 
             if message_type:
-                message_value = input('Insert the {}: '.format(message_type))
+                message_content = input('Insert the {}: '.format(message_type))
                 try:
-                    return self.factory.create_message(message_value, message_type)
+                    return self.factory.create_message(message_content, message_type)
                 except ValueError as e:
                     print(e)
             else:
