@@ -1,29 +1,28 @@
-package app;
+package app.factories;
 
 import app.strategies.*;
-import app.utils.message;
+import app.utils.Message;
 
-class MessageFactory {
-    public Message buildMessageFromPayload(bytes[] payload) {
-        String buffer = new String(payload);
+public class MessageFactory {
+    public Message buildMessageFromPayload(byte[] payload) throws IllegalArgumentException {
+        String buffer = new String(payload).trim();
         String content, type;
-        switch (payload.charAt(0)) {
+        switch (buffer.charAt(0)) {
         case 'i':
-            type = "Integer";
-            content = new IntegerStrategy().execute(buffer);
+            type = "integer";
+            content = new IntegerStrategy().execute(buffer.substring(1));
             break;
         case 'c':
-            type = "Character";
-            content = new CharStrategy().execute(buffer);
+            type = "char";
+            content = new CharStrategy().execute(buffer.substring(1));
             break;
         case 's':
-            type = "String";
-            content = new StringStrategy().execute(buffer);
+            type = "string";
+            content = new StringStrategy().execute(buffer.substring(1));
             break;
         default:
             throw new IllegalArgumentException("Invalid message type");
-            break;
         }
-        return Message(content, type);
+        return new Message(content, type);
     }
 }

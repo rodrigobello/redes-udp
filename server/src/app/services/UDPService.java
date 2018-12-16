@@ -2,35 +2,39 @@ package app.services;
 
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
-import utils.Datagram;
+import app.utils.SimpleDatagram;
+import app.factories.DatagramFactory;
 
-class UDPService {
+public class UDPService {
     private DatagramSocket serverSocket;
-    private byte[] datagramSize;
+    private int datagramSize;
+    private DatagramFactory factory;
 
-    public UDPService(int port, int datagramSize) {
+    public UDPService(int port, int datagramSize) throws Exception {
+        System.out.println(String.format("Creating socket at %d...",port));
         this.serverSocket = new DatagramSocket(port);
         this.datagramSize = datagramSize;
+        this.factory = new DatagramFactory();
     }
 
-    public Datagram receiveMessage() {
+    public SimpleDatagram receive() throws Exception {
+        System.out.println("Waiting message...");
         byte[] receiveData = new byte[this.datagramSize];
-        DatagramPacket receivePacket = new DatagramPacket(this.receiveData, this.receiveData.length);
-        this.serverSocket.receive(receivePacket);
-
-        // Map DatagramPacket to Datagram
-        return th();
+        DatagramPacket packet = new DatagramPacket(receiveData, receiveData.length);
+        this.serverSocket.receive(packet);
+        System.out.println(String.format("[New message from %s]",packet.getAddress().toString()));
+        SimpleDatagram data = this.factory.buildSimpleDatagramFromDatagramPacket(packet);
+        return data;
     }
 
-    public void sendMessage(Datagram data) {
+    public void send(SimpleDatagram data) throws Exception {
+        System.out.println(String.format("Sending %s...", data.getMessage().toString()));
+        DatagramPacket packet = this.factory.buildDatagramPacketFromSimpleDatagram(data);
+        this.serverSocket.send(packet);
+    }
 
-        // Map Datagram to DatagramPacket
-        DatagramPacket sendPacket = new DatagramPacket(
-            data.getMessage(),
-            data.getDataLength(),
-            data.getIpAddress(),
-            data.getPort()
-        );
-        this.serverSocket.send(sendPacket);
+    public void close() throws Exception {
+        System.out.println("Closing socket...");
+        this.serverSocket.close();
     }
 }

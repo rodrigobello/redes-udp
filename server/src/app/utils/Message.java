@@ -1,6 +1,6 @@
-package app.message;
+package app.utils;
 
-class Message {
+public class Message {
     private String content;
     private String type;
 
@@ -9,11 +9,11 @@ class Message {
         this.type = type;
     }
 
-    public bytes[] encode() {
+    public byte[] encode() {
         return this.content.getBytes();
     }
 
     public String toString() {
-        return String.format("%s: %s", this.type, this.content);
+        return String.format("%s '%s'", this.type, this.content);
     }
 }
