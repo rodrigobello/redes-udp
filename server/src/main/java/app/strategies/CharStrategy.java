@@ -1,13 +1,13 @@
-package app.strategies;
+package app.message.strategies;
 
-import utils.Strategy;
+import app.strategies.Strategy;
 
 public class CharStrategy implements Strategy {
-  @Override
-  public String execudte(String buffer) {
-    if (Character.isUpperCase(buffer.charAt(0))) {
-      return buffer.toLowerCase();
+    @Override
+    public String execute(String buffer) {
+        if (Character.isUpperCase(buffer.charAt(0))) {
+            return buffer.toLowerCase();
+        }
+        return buffer.toUpperCase();
     }
-    return buffer.toUpperCase();
-  }
 }
