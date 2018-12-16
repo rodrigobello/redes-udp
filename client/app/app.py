@@ -40,4 +40,4 @@ class App:
             host=host,
             port=port
         )
-        print('RTT: {} ms'.format(rtt*1000))
+        print('RTT: {} ms'.format(rtt))

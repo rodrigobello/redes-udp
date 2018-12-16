@@ -36,5 +36,5 @@ class ClientController:
                 print(e.message)
             else:
                 print(e)
-        else:
-            return rtt.total_seconds()
+        finally:
+            return rtt.total_seconds() * 1000 if rtt else 0
